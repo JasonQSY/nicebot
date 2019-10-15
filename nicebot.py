@@ -18,7 +18,7 @@ def main():
             continue
         proc = psutil.Process(pid=info['pid'])
         nice = proc.nice()
-        if nice < 20:
+        if nice < 10:
             message += str(info) + '\n'
             cnt += 1
     # Send a message to #general channel
