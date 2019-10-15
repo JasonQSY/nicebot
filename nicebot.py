@@ -21,7 +21,7 @@ def main():
         if nice < 10:
             message += str(info) + '\n'
             cnt += 1
-    # Send a message to #general channel
+
     message += '```'
     if cnt > 0:
         slack.chat.post_message('#nicebot', message)
