@@ -132,7 +132,7 @@ def main():
     for i in range(len(pid)):
         proc = psutil.Process(pid=int(pid[i]))
         nice = proc.nice()
-        if nice < 20:
+        if nice < 5:
             cnt += 1
             message += format % (gpu_num[i], pid[i], nice, user[i], gpu_mem[i],
                 cpu[i], mem[i], time[i], command[i])
