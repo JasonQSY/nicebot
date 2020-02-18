@@ -5,18 +5,14 @@ import os
 import re
 import subprocess
 import select
+import socket
+
 
 def collect_gpu_info():
     MEMORY_FREE_RATIO = 0.05
     MEMORY_MODERATE_RATIO = 0.9
     GPU_FREE_RATIO = 0.05
     GPU_MODERATE_RATIO = 0.75
-
-    #parser = argparse.ArgumentParser()
-    #parser.add_argument('-l', '--command-length', default=20, const=100, type=int, nargs='?')
-    #parser.add_argument('-c', '--color', action='store_true')
-
-    #args = parser.parse_args()
 
     # parse the command length argument
     command_length = 20
@@ -118,11 +114,21 @@ def collect_cpu_info():
 
 
 def main():
+    # initialize nicebot
     token = os.environ['NICEBOT_TOKEN']
     slack = Slacker(token)
+    message = ''
+
+    # detect hostname and server-specific info
+    hostname = socket.gethostname()
+    prefix = "Performing nice scan on {}: ".format(hostname)
+    if hostname == 'epicfail':
+        prefix = ':fail: :epic: ' + prefix
+    elif hostname == 'titanic':
+        prefix += ':iceberg:: ' + prefix
 
     # collect gpu info
-    message = '```'
+    message += prefix + '\n```'
     cnt = 0
     command_length = 20
     gpu_num, pid, user, gpu_mem, cpu, mem, time, command = collect_gpu_info()
@@ -142,7 +148,7 @@ def main():
     if cnt > 0:
         slack.chat.post_message('#nicebot', message)
     else:
-        slack.chat.post_message('#nicebot', "very nice in this scan!")
+        slack.chat.post_message('#nicebot', prefix + "very nice!")
 
 
 if __name__=='__main__':
