@@ -140,9 +140,9 @@ def main():
     message += '```'
 
     if cnt > 0:
-        slack.chat.post_message('#nicebot-dev', message)
+        slack.chat.post_message('#nicebot', message)
     else:
-        slack.chat.post_message('#nicebot-dev', "very nice in this scan!")
+        slack.chat.post_message('#nicebot', "very nice in this scan!")
 
 
 if __name__=='__main__':
