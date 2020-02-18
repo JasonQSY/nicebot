@@ -125,7 +125,7 @@ def main():
     if hostname == 'epicfail':
         prefix = ':fail: :epic: ' + prefix
     elif hostname == 'titanic':
-        prefix += ':iceberg:: ' + prefix
+        prefix = ':iceberg:: ' + prefix
 
     # collect gpu info
     message += prefix + '\n```'
