@@ -118,30 +118,31 @@ def collect_cpu_info():
 
 
 def main():
-    slack = Slacker('xoxp-498725714531-500356459845-797596978710-9544d3f3dfd64f2cb8a1149e4d70a496')
-    
+    token = os.environ['NICEBOT_TOKEN']
+    slack = Slacker(token)
+
     # collect gpu info
     message = '```'
     cnt = 0
     command_length = 20
     gpu_num, pid, user, gpu_mem, cpu, mem, time, command = collect_gpu_info()
-    format = ("|  %3s %5s %8s   %8s %5s %5s %9s  %-" + str(command_length) + "." + str(command_length) + "s  |")
-    message += format % ("GPU", "PID", "USER", "GPU MEM", "%CPU", "%MEM", "TIME", "COMMAND")
+    format = ("%3s %5s %4s %8s   %8s %5s %5s %9s  %-" + str(command_length) + "." + str(command_length) + "s")
+    message += format % ("GPU", "PID", "NICE", "USER", "GPU MEM", "%CPU", "%MEM", "TIME", "COMMAND")
     message += '\n'
     for i in range(len(pid)):
         proc = psutil.Process(pid=int(pid[i]))
         nice = proc.nice()
-        if nice < 10:
+        if nice < 20:
             cnt += 1
-            message += format % (gpu_num[i], pid[i], user[i], gpu_mem[i],
+            message += format % (gpu_num[i], pid[i], nice, user[i], gpu_mem[i],
                 cpu[i], mem[i], time[i], command[i])
             message += '\n'
     message += '```'
 
     if cnt > 0:
-        slack.chat.post_message('#nicebot', message)
+        slack.chat.post_message('#nicebot-dev', message)
     else:
-        slack.chat.post_message('#nicebot', "very nice in this scan!")
+        slack.chat.post_message('#nicebot-dev', "very nice in this scan!")
 
 
 if __name__=='__main__':
