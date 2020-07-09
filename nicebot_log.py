@@ -147,7 +147,7 @@ def main():
         message += '\n'
     #message += ''
 
-    f = open('/Pool1/users/syqian/gpu_log/epicfail.log', 'w')
+    f = open('/Pool1/users/syqian/gpu_log/{}.log'.format(hostname), 'w')
     if cnt > 0:
         f.write(message)
         f.write('\n')
